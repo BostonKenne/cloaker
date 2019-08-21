@@ -1,0 +1,29 @@
+    """ Deleting or removing users """
+    @classmethod
+    async def __delete_users(cls, url: str, access_token: str):
+        try:
+            await asyncio.sleep(0.005)
+            pass
+        except Exception as e:
+            return {"message": "Server Error -> " + str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR.value
+
+    @classmethod
+    async def _delete_users(cls, url: str, access_token: str):
+        try:
+            result = asyncio.create_task(cls._delete_users(url=url, access_token=access_token))
+            await asyncio.wait([result])
+            return result
+        except Exception as e:
+            return {"message": "Server Error -> " + str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR.value
+
+    @classmethod
+    def delete_users(cls, url: str, access_token: str):
+        loop = uvloop.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            result = loop.run_until_complete().result()
+            return result
+        except Exception as e:
+            return {"message": "Server Error -> " + str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR.value
+        finally:
+            loop.close()
